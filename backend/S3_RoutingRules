@@ -1,0 +1,21 @@
+<RoutingRules>
+  <RoutingRule>
+    <Condition>
+      <KeyPrefixEquals>routes/</KeyPrefixEquals>
+      <HttpErrorCodeReturnedEquals>403</HttpErrorCodeReturnedEquals>
+    </Condition>
+    <Redirect>
+      <HostName>gtt.la</HostName>
+      <ReplaceKeyWith/>
+    </Redirect>
+  </RoutingRule>
+  <RoutingRule>
+    <Condition>
+      <HttpErrorCodeReturnedEquals>403</HttpErrorCodeReturnedEquals>
+    </Condition>
+    <Redirect>
+      <HostName>r.gtt.la</HostName>
+      <ReplaceKeyPrefixWith>route.html?id=</ReplaceKeyPrefixWith>
+    </Redirect>
+  </RoutingRule>
+</RoutingRules>
