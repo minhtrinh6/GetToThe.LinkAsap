@@ -6,6 +6,9 @@
 # Roadmap
 * URL analytic available to users
   * Using DynamoDB to store log
-  * Process log from CloudTrail
-    * Using AWS Lambda to process log
-    * Triggered every 1 minute
+  * Process log from user request
+    * Realtime traffic count
+    * Using inexpensive EC2 Spot Instance as request processor
+  * ~~Process log from CloudTrail~~
+    * ~~Using AWS Lambda to process log~~
+    * ~~Triggered every 1 minute~~
