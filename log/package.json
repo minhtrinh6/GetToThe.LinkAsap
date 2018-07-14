@@ -1,0 +1,15 @@
+pac{
+  "name": "log",
+  "version": "1.0.0",
+  "description": "",
+  "main": "log.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tri Hoang",
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^3.2.2",
+    "redis": "^2.8.0"
+  }
+}
