@@ -31,6 +31,7 @@
 			).join('&');
 	}
 
+	var post = process_post({'link': get("id").toLowerCase().replace('/', ''), 're': true})
 	// Old compatibility code, no longer needed.
 	if (window.XMLHttpRequest) { // Mozilla, Safari, IE7+ ...
 		httpRequest = new XMLHttpRequest();
@@ -38,7 +39,8 @@
 	 	httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	httpRequest.open("POST", "https://l.gtt.la/", true)
+	httpRequest.timeout = 4000;
 	httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	httpRequest.send(process_post({'link': get("id").toLowerCase().replace('/', ''), 're': true}));
+	httpRequest.send(post);
 	redirect("routes/" + get("id").toLowerCase().replace('/', '') + ".html")
 </script>
