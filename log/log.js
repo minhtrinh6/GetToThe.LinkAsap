@@ -20,7 +20,7 @@ function udp_it(request) {
   var PORT = 41234;
   var HOST = "52.201.47.240"
 
-  var message = new Buffer(JSON.stringify(request))
+  var message = new Buffer.from(JSON.stringify(request))
   
   var client = dgram.createSocket('udp4')
   client.send(message, 0, message.length, PORT, HOST, function(err, bytes) {

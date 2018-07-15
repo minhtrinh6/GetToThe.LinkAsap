@@ -1,19 +1,109 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>GetToThe.LinkAsap</title>
-	<link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAD8fwAA/H8AAPxjAAD/4wAA/+MAAMY/AADGPwAAxjEAAP/xAAD/8QAA4x8AAOMfAADjHwAA//8AAP//AAA=" rel="icon" type="image/x-icon">
-</head>
-<body>
-	<a href="https://github.com/tri-hoang/GetToThe.LinkAsap" target="_blank">Under development.</a> Last update: 6/30/2018<br>
-	Progress: Backend [##___] | Frontend [#____]
-	<div id="root"></div>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        <style type="text/css">
+            .top-buffer { margin-top:20px; }
+            .row-bottom-margin { margin-bottom:20px; }
+            .fa-user { 
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+.no-glow:focus {
+  /*border-color: #FF0000;*/
+  box-shadow: none
+}
+        </style>
+        
+        <title>Hello, world!</title>
+    </head>
+    <body>
+        <div class="container">
+          <div class="row top-buffer row-bottom-margin">
+            <div class="col">
+        <form class="input-group input-group-lg shadow rounded" onSubmit="submit_form()">
+            <span class="input-group-prepend">
+                  <div class="input-group-text bg-light border"><i class="fa fa-angle-double-right"></i></div>
+            </span>
+            <input class="form-control bg-light py-2 border-left-0 border no-glow" type="search" placeholder="put long url here" id="input_url">
+            <span class="input-group-append">
+                <button class="btn btn-primary no-glow btn-sm" type="submit">Shorten it</button>
+              </span>
+        </form>      
+            </div>
+          </div>
+          <div class="row row-bottom-margin">
+            <div class="col">
+              <div class="card text-center shadow-sm bg-light rounded">
+                  <div class="card-body">
+                    <h5 class="card-title">Home</h5>
+                    <ul id="link_list" class="list-group">
+                    </ul>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="row row-bottom-margin">
+            <div class="col">
+                <center>Footer</center>
+            </div>
+          </div>
+        </div>
+        
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+      	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+      	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+      	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+      	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+      	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-	<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
-    <script src="app.jsx" type="text/babel"></script>
-</body>
+      	
+        <script type="text/javascript">
+          var socket = io('l.gtt.la', {path: '/ws/', transports: ['websocket', 'polling', 'flashsocket']})
+          var ls = localStorage.getItem('links')
+          var links = ((ls != null) ? JSON.parse(ls) : [])
+          for (var key in links) {
+            socket.emit('subscribe', links[key].c_link.toLowerCase())
+            add_to_ul(links[key])
+          }
+           socket.on('update', function (data) {
+             var count = (data.count == null) ? 0 : data.count
+            document.getElementById(data.link).innerHTML = count + " clicks";
+           });
+           
+          function submit_form() {
+            event.preventDefault()
+            var url = document.getElementById('input_url').value
+            generate_link(url)
+          }
+          function generate_link(url) {
+            axios.post('https://b7yg46eoyd.execute-api.us-east-1.amazonaws.com/dev/hello', url)
+            .then((response) => {
+                var s_url = response.data.url
+                var datum = {c_link: s_url, to: url}
+                links.push(datum)
+                add_to_ul(datum)
+        				localStorage.setItem('links', JSON.stringify(links))
+        			})
+          }
+          
+          function add_to_ul(data) {
+            socket.emit('subscribe', data.c_link.toLowerCase())
+            $("#link_list").append(`
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  https://gtt.la/${data.c_link} -> ${data.to}
+                <span id="${data.c_link.toLowerCase()}" class="badge badge-primary badge-pill">0 clicks</span>
+              </li>
+            `)
+          }
+        </script>
+    </body>
 </html>
