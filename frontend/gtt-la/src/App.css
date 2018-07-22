@@ -35,20 +35,47 @@ body { background: #EBEDEF !important; }
 .App-row-bottom-margin { margin-bottom:20px; }
 .App-no-glow { box-shadow: none }
 
-.example-enter {
+.Appbody-list-enter {
   opacity: 0.01;
 }
 
-.example-enter.example-enter-active {
+.Appbody-list-enter.Appbody-list-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in;
 }
 
-.example-leave {
+.Appbody-list-leave {
   opacity: 1;
 }
 
-.example-leave.example-leave-active {
+.Appbody-list-leave.Appbody-list-leave-active {
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
+
+.Appbody-view-count {
+  opacity: 0.01;
+}
+
+.Appbody-view-count.Appbody-view-count-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.Appbody-view-count-leave {
+  opacity: 1;
+}
+
+.Appbody-view-count-leave.Appbody-view-count-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+/*.App-click-update {*/
+/*  animation: bounce 1s;*/
+/*}*/
+
+/*@keyframes bounce {*/
+/*  from {opacity: 0.01}*/
+/*  to {opacity: 1}*/
+/*} */

@@ -8,15 +8,16 @@
     "@fortawesome/react-fontawesome": "0.1.0-11",
     "bootstrap": "^4.1.2",
     "i": "^0.3.6",
+    "immutability-helper": "^2.7.1",
     "npm": "^6.2.0",
-    "radium": "^0.24.1",
     "react": "^16.4.1",
     "react-addons-css-transition-group": "^15.6.2",
+    "react-animate-on-change": "^2.1.1",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
-    "react-simple-storage": "^1.2.2",
     "reactstrap": "^6.3.0",
-    "socket.io-client": "^2.1.1"
+    "socket.io-client": "^2.1.1",
+    "store": "^2.0.12"
   },
   "scripts": {
     "start": "react-scripts start",

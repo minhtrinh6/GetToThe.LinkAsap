@@ -2,20 +2,21 @@
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'animate.css/animate.min.css';
 
 import React, { Component } from 'react';
+import update from 'immutability-helper';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Container, Button, Row, Col, Card, CardBody,
   CardTitle, InputGroup, InputGroupAddon, InputGroupText, Input, ListGroup, 
-  ListGroupItem, Badge} 
+  ListGroupItem, Badge, ListGroupItemHeading, ListGroupItemText} 
 from 'reactstrap';
 
-import SimpleStorage from "react-simple-storage";
-
+// import SimpleStorage from "react-simple-storage";
+import StatePersist from "./StatePersist.js";
 import fetch from 'isomorphic-fetch';
 
 import io from 'socket.io-client';
-
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,25 +24,24 @@ import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faAngleDoubleRight);
 
+
 class App extends Component {
   constructor(props) {
     super(props);
-    // const socket = io('l.gtt.la', {path: '/ws/', transports: ['websocket', 'polling', 'flashsocket']});
     this.state = {
       text: '',
       save: new Map(),
       ws: io('l.gtt.la', {path: '/ws/', transports: ['websocket', 'polling', 'flashsocket']})
     };
+    
+    this.hydrateCallback = {
+      save: (value) => Array.from(value.values()).forEach((item) => this.state.ws.emit('subscribe', item.id))
+    };
   }
 
-  // socket.on('update', function (data) {
-  //             var count = (data.count == null) ? 0 : data.count
-               
-  //             document.getElementById(data.link).innerHTML = count + " clicks";
-  //           });
     handleInputText = (newText) => {
-    // this.setState({save: []});
-    this.setState({text: newText});
+      // this.setState({save: new Map()});
+      this.setState({text: newText});
   }
   
   handleSubmitText = () => {
@@ -49,14 +49,19 @@ class App extends Component {
       method: 'POST',
       body: this.state.text
     })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      var datum = {gLink: responseJson.url, to: this.state.text, view: 0};
-      var key = responseJson.url.toLowerCase();
-      this.state.ws.emit('subscribe', key);
+    .then((resp) => resp.json())
+    .then((resp) => {
+      var datum = {
+        id: resp.url.toLowerCase(),
+        gLink: resp.url, 
+        to: this.state.text, 
+        view: 0,
+      };
+      
+      this.state.ws.emit('subscribe', datum.id);
       this.setState(prevState => ({
         text: '',
-        save: prevState.save.set(key, datum)
+        save: prevState.save.set(datum.id, datum)
       }));
     })
     .catch((error) => {
@@ -64,12 +69,21 @@ class App extends Component {
     });
     
   }
+    
+  componentDidMount() {
+    this.state.ws.on('update', (data) => {
+      var count = (data.count == null) ? 0 : data.count;
+      this.setState({
+        save: update(this.state.save, {[data.link]: {view: {$set: count}}})
+      });
+    });
+  }
   
   render() {
-    // console.log(typeof(this.state.save.values()))
+
     return (
     <Container>
-    <SimpleStorage parent={this} />
+    <StatePersist parent={this} hydrateCallback={this.hydrateCallback}/>
       <Row className="App-top-buffer App-row-bottom-margin">
         <Col>
           <AppHead handleInputText={this.handleInputText} handleSubmitText={this.handleSubmitText} text={this.state.text}/>
@@ -77,7 +91,7 @@ class App extends Component {
       </Row>
       <Row className="App-row-bottom-margin">
         <Col>
-          <AppBody save={Array.from(this.state.save.values())}/>
+          <AppBody save={Array.from(this.state.save.values()).reverse()} ws={this.state.ws}/>
         </Col>
       </Row>
       <Row className="App-row-bottom-margin">
@@ -125,9 +139,18 @@ class AppBody extends Component {
         <CardBody>
           <CardTitle>Generated Links</CardTitle>
           <ListGroup>
-            <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={700} transitionLeaveTimeout={700}>
+            <ReactCSSTransitionGroup transitionName="Appbody-list" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
             {this.props.save.map(item => (
-              <ListGroupItem key={item.gLink}><a href={"https://gtt.la/" + item.gLink} target="_blank">https://gtt.la/{item.gLink}</a> -> {item.to} <Badge color="primary">{item.view} clicks</Badge></ListGroupItem>
+              <ListGroupItem key={item.gLink}>
+                <ListGroupItemHeading>
+                  <a className="float-left" href={"https://gtt.la/" + item.gLink} target="_blank">https://gtt.la/{item.gLink}</a>
+                  <Badge className="float-right" color="primary">{item.view} clicks</Badge>
+                </ListGroupItemHeading>
+                <br/><ListGroupItemText className="float-left">
+                  <FontAwesomeIcon icon="angle-double-right" />
+                  {item.to}
+                </ListGroupItemText><br/>
+              </ListGroupItem>
             ))}
             </ReactCSSTransitionGroup>
           </ListGroup>
@@ -149,7 +172,7 @@ class AppFoot extends Component {
   render() {
     return (
       <div>
-        <center>Make by <a href="https://trihoang.net" target="_blank" rel="noopener noreferrer">Tri Hoang</a></center>
+        <center>Made by <a href="https://trihoang.net" target="_blank" rel="noopener noreferrer">Tri Hoang</a></center>
       </div>
     );
   }
