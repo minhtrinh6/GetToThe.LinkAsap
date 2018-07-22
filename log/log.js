@@ -1,31 +1,48 @@
-var dgram = require('dgram');
+const express = require('express')
+const cors = require('cors')
+const app = express()
+var bodyParser = require('body-parser')
+var redis = require("redis"),
+    client = redis.createClient({password: 'CuteShibaBouncing'});
+      pub = redis.createClient({password: 'CuteShibaBouncing'});
+      sub = redis.createClient({password: 'CuteShibaBouncing'});
+const io = require('socket.io')(3001, {path: '/ws'});
+io.origins('*:*')
+const redisAdapter = require('socket.io-redis');
+io.adapter(redisAdapter({ pubClient: pub, subClient: sub }));
 
-exports.handler = (event, context, callback) => {
-    const request = event.Records[0].cf.request;
-    const uri = request.uri;
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 
-    if (uri == '' || uri == '/index.html' || uri == "/" || uri == "/app.jsx") {
-        callback(null, request);
-        return;
-    }
-    
-    udp_it(request);
-    
-    var link = String(uri).replace("/", "").toLowerCase();
-    request['uri'] = "/routes/" + link + ".html"
-    callback(null, request)
+var corsOptions = {
+  origin: 'https://r.gtt.la'
 }
+app.use(cors(corsOptions))
+app.enable('trust proxy');
 
-function udp_it(request) {
-  var PORT = 41234;
-  var HOST = "52.201.47.240"
+app.post('/', function (req, res, next) {
+  var ip = req.ip
+  client.incr(String(req.body.link), function() {})
+  client.get(String(req.body.link), function(err, result) {
+    io.in(String(req.body.link)).emit('update', {link: String(req.body.link), count: result});
+  })
+  res.sendStatus(200)
+})
 
-  var message = new Buffer.from(JSON.stringify(request))
-  
-  var client = dgram.createSocket('udp4')
-  client.send(message, 0, message.length, PORT, HOST, function(err, bytes) {
-      if (err) throw err;
-      console.log('UDP message sent to ' + HOST +':'+ PORT);
-      client.close();
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
   });
-}
+
+  socket.on('subscribe', function(room) {
+    socket.join(room)
+  client.get(room, function(err, result) {
+    io.in(room).emit('update', {link: room, count: result});
+  })
+  })
+});
+app.listen(3000, () => console.log('Example app listening on port 3000!'))
