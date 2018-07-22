@@ -2,17 +2,17 @@
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'animate.css/animate.min.css';
+
 
 import React, { Component } from 'react';
 import update from 'immutability-helper';
+
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Container, Button, Row, Col, Card, CardBody,
   CardTitle, InputGroup, InputGroupAddon, InputGroupText, Input, ListGroup, 
   ListGroupItem, Badge, ListGroupItemHeading, ListGroupItemText} 
 from 'reactstrap';
 
-// import SimpleStorage from "react-simple-storage";
 import StatePersist from "./StatePersist.js";
 import fetch from 'isomorphic-fetch';
 
@@ -143,7 +143,7 @@ class AppBody extends Component {
             {this.props.save.map(item => (
               <ListGroupItem key={item.gLink}>
                 <ListGroupItemHeading>
-                  <a className="float-left" href={"https://gtt.la/" + item.gLink} target="_blank">https://gtt.la/{item.gLink}</a>
+                  <a className="float-left" href={"https://gtt.la/" + item.gLink} target="_blank">&nbsp;https://gtt.la/{item.gLink}</a>
                   <Badge className="float-right" color="primary">{item.view} clicks</Badge>
                 </ListGroupItemHeading>
                 <br/><ListGroupItemText className="float-left">

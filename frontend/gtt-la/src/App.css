@@ -70,12 +70,3 @@ body { background: #EBEDEF !important; }
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
-
-/*.App-click-update {*/
-/*  animation: bounce 1s;*/
-/*}*/
-
-/*@keyframes bounce {*/
-/*  from {opacity: 0.01}*/
-/*  to {opacity: 1}*/
-/*} */
