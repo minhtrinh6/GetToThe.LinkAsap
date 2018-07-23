@@ -34,7 +34,6 @@ app.post('/', function (req, res, next) {
 
 io.on('connection', function(socket){
   socket.on('disconnect', function(){});
-
   socket.on('subscribe', function(room) {
     socket.join(room)
   client.get(room, function(err, result) {
