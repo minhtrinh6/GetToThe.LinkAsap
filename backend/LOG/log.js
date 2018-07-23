@@ -3,8 +3,8 @@ const cors = require('cors')
 const app = express()
 var bodyParser = require('body-parser')
 var redis = require("redis"),
-    client = redis.createClient({password: 'CuteShibaBouncing'});
-      pub = redis.createClient({password: 'CuteShibaBouncing'});
+    client = redis.createClient({password: 'CuteShibaBouncing'}),
+      pub = redis.createClient({password: 'CuteShibaBouncing'}),
       sub = redis.createClient({password: 'CuteShibaBouncing'});
 const io = require('socket.io')(3001, {path: '/ws'});
 io.origins('*:*')
@@ -33,10 +33,7 @@ app.post('/', function (req, res, next) {
 
 
 io.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
+  socket.on('disconnect', function(){});
 
   socket.on('subscribe', function(room) {
     socket.join(room)

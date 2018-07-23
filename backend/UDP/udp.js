@@ -1,8 +1,8 @@
 const dgram = require('dgram'),
 	  server = dgram.createSocket('udp4');
 const redis = require("redis"),
-	  log = redis.createClient({password: 'CuteShibaBouncing'});
-      pub = redis.createClient({password: 'CuteShibaBouncing'});
+	  log = redis.createClient({password: 'CuteShibaBouncing'}),
+      pub = redis.createClient({password: 'CuteShibaBouncing'}),
       sub = redis.createClient({password: 'CuteShibaBouncing'});
 const io = require('socket.io')();
 const redisAdapter = require('socket.io-redis');
@@ -18,7 +18,6 @@ server.on('message', (msg, rinfo) => {
 	var uri = String(req.uri.replace('/', '')).toLowerCase()
 	log.get(uri, function (err, reply) {
 		reply = ((reply != null) ? parseInt(reply,10)+1 : 1)
-		console.log(uri + ":" + reply)		
 		io.to(uri).emit('update', {link: uri, count: reply})
 		log.incr(uri)
 	})
