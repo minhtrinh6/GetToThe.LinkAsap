@@ -18,7 +18,6 @@ server.on('message', (msg, rinfo) => {
 	var uri = String(req.uri.replace('/', '')).toLowerCase()
 	log.get(uri, function (err, reply) {
 		reply = ((reply != null) ? parseInt(reply,10)+1 : 1)
-		console.log(uri + ":" + reply)		
 		io.to(uri).emit('update', {link: uri, count: reply})
 		log.incr(uri)
 	})
