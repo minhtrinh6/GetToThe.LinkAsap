@@ -70,3 +70,23 @@ body { background: #EBEDEF !important; }
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
+
+@keyframes hideshow {
+  0% {transform: translate(10px, 10px);}
+  10% {transform: translate(20px, -30px);
+  	transform: skewX(20deg);}
+  20% {transform: translate(30px, -40px);}
+  30% { opacity: 1;}
+  100% { opacity: 1; }
+} 
+
+#l_letter {
+	opacity: 0;
+  /*animation: hideshow 1s ease infinite;*/
+}
+
+#spaceship {
+	opacity: 1;
+	/*transform: skewX(-0.3deg);*/
+  animation: hideshow 3s ease infinite;
+}
