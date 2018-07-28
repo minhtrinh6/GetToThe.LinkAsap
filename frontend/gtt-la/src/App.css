@@ -71,22 +71,31 @@ body { background: #EBEDEF !important; }
   transition: opacity 300ms ease-in;
 }
 
-@keyframes hideshow {
-  0% {transform: translate(10px, 10px);}
-  10% {transform: translate(20px, -30px);
-  	transform: skewX(20deg);}
-  20% {transform: translate(30px, -40px);}
-  30% { opacity: 1;}
-  100% { opacity: 1; }
-} 
 
-#l_letter {
-	opacity: 0;
-  /*animation: hideshow 1s ease infinite;*/
+
+@keyframes flyup {
+  0%  {opacity: 1; transform: translate(0, 0)}
+  30%  {opacity: 1; transform: translate(0, 0)}
+  60% {transform: translateY(-300px); opacity: 0}
+}
+
+@keyframes hidel {
+  0% {opacity: 0}
+  70% {opacity: 0}
+  100% {opacity: 1}
 }
 
 #spaceship {
-	opacity: 1;
-	/*transform: skewX(-0.3deg);*/
-  animation: hideshow 3s ease infinite;
+  opacity: 0;
+  animation: flyup 3s ease-out infinite;
+}
+
+#l {
+  animation: hidel 3s steps(100) infinite;
+}
+
+.logo {
+    margin-left: 67px;
+    /*margin-right: auto;*/
+    /*width: 50%;*/
 }
