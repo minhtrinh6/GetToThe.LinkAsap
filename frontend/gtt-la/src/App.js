@@ -35,12 +35,11 @@ class App extends Component {
     };
     
     this.hydrateCallback = {
-      save: (value) => Array.from(value.values()).forEach((item) => this.state.ws.emit('subscribe', item.id))
+      save: (value) => value.forEach((v, k, m) => this.state.ws.emit('subscribe', v.id))
     };
   }
 
     handleInputText = (newText) => {
-      // this.setState({save: new Map()});
       this.setState({text: newText});
   }
   
@@ -152,39 +151,47 @@ class AppHead extends React.Component {
 
 class AppBody extends Component {
   render() {
-    if (this.props.save.length !== 0) {
-      return (
-      <Card className="text-center shadow-lg bg-light rounded">
-        <CardBody>
-          <CardTitle>Generated Links</CardTitle>
-          <ListGroup>
-            <ReactCSSTransitionGroup transitionName="Appbody-list" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
-            {this.props.save.map(item => (
-              <ListGroupItem key={item.gLink}>
-                <ListGroupItemHeading>
-                  <a className="float-left" href={"https://gtt.la/" + item.gLink} target="_blank">https://gtt.la/{item.gLink}</a>
-                  <Badge className="float-right" color="info">{item.view} clicks</Badge>
-                </ListGroupItemHeading>
-                <br/><ListGroupItemText className="float-left">
-                  <FontAwesomeIcon icon="angle-double-right" />
-                  {item.to}
-                </ListGroupItemText><br/>
-              </ListGroupItem>
-            ))}
-            </ReactCSSTransitionGroup>
-          </ListGroup>
-        </CardBody>
-      </Card>
-      )}
-    else {
-      return (
-        <Card className="text-center shadow-lg bg-light rounded">
-          <CardBody>
-            <CardTitle>Welcome to GetToThe.LinkAsap</CardTitle>
-          </CardBody>
-        </Card>
-        )}
+    if (this.props.save.length !== 0)
+      return (<AppBodyWithList save={this.props.save}/>)
+    else
+      return (<AppBodyWithoutList />)
   }
+}
+
+const AppBodyWithList = (props) => {
+  return (
+    <Card className="text-center shadow-lg bg-light rounded">
+      <CardBody>
+        <CardTitle>Generated Links</CardTitle>
+        <ListGroup>
+          <ReactCSSTransitionGroup transitionName="Appbody-list" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
+          {props.save.map(item => (
+            <ListGroupItem key={item.gLink}>
+              <ListGroupItemHeading>
+                <a className="float-left" href={"https://gtt.la/" + item.gLink} target="_blank">https://gtt.la/{item.gLink}</a>
+                <Badge className="float-right" color="info">{item.view} clicks</Badge>
+              </ListGroupItemHeading>
+              <br/><ListGroupItemText className="float-left">
+                <FontAwesomeIcon icon="angle-double-right" />
+                {item.to}
+              </ListGroupItemText><br/>
+            </ListGroupItem>
+          ))}
+          </ReactCSSTransitionGroup>
+        </ListGroup>
+      </CardBody>
+    </Card>
+  )
+}
+
+const AppBodyWithoutList = () => {
+  return (
+    <Card className="text-center shadow-lg bg-light rounded">
+      <CardBody>
+        <CardTitle>Welcome to GetToThe.LinkAsap</CardTitle>
+      </CardBody>
+    </Card>
+  )
 }
 
 class AppFoot extends Component {
