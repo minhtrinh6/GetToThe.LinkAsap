@@ -137,7 +137,22 @@ class AppHead extends React.Component {
   
   handleSubmit = (e) => {
     e.preventDefault();
+    if (this.isURL(this.props.text) === false) {
+      alert("Invalid URL"); // TODO: Make use of better alert system
+      return;
+    }
     this.props.handleSubmitText();
+  }
+  
+  // https://stackoverflow.com/a/14582229/2900949
+  isURL = (str) => {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return pattern.test(str);
   }
 
   render() {
