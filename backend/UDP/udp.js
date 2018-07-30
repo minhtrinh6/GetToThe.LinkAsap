@@ -1,16 +1,16 @@
 const dgram = require('dgram'),
 	  server = dgram.createSocket('udp4');
 const redis = require("redis"),
-	  log = redis.createClient({password: 'CuteShibaBouncing'}),
-      pub = redis.createClient({password: 'CuteShibaBouncing'}),
-      sub = redis.createClient({password: 'CuteShibaBouncing'});
+	  log = redis.createClient({password: process.env.GTT_PASSWORD}),
+      pub = redis.createClient({password: process.env.GTT_PASSWORD}),
+      sub = redis.createClient({password: process.env.GTT_PASSWORD});
 const io = require('socket.io')();
 const redisAdapter = require('socket.io-redis');
 io.adapter(redisAdapter({ pubClient: pub, subClient: sub }));
 // Part of https://github.com/chris-rock/node-crypto-examples
 var crypto = require('crypto'),
     algorithm = 'aes-128-cbc',
-    password = 'CuteShibaBouncing';
+    password = process.env.GTT_PASSWORD;
     
 server.on('error', (err) => {
   console.log(`server error:\n${err.stack}`);
