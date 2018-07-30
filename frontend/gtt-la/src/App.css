@@ -93,9 +93,3 @@ body { background: #EBEDEF !important; }
 #l {
   animation: hidel 3s steps(100) infinite;
 }
-
-.logo {
-    margin-left: 67px;
-    /*margin-right: auto;*/
-    /*width: 50%;*/
-}
