@@ -1,5 +1,9 @@
 var dgram = require('dgram');
-
+// Part of https://github.com/chris-rock/node-crypto-examples
+var crypto = require('crypto'),
+    algorithm = 'aes-128-cbc',
+    password = 'CuteShibaBouncing';
+    
 exports.handler = (event, context, callback) => {
     const request = event.Records[0].cf.request;
     const uri = request.uri;
@@ -20,11 +24,17 @@ function udp_it(request) {
   var HOST = 'l-in.gtt.la'
   var PORT = 48846;
 
-  var message = new Buffer.from(JSON.stringify(request))
+  var message = encrypt(Buffer.from(JSON.stringify(request), "utf8"))
   
   var client = dgram.createSocket('udp4')
   client.send(message, 0, message.length, PORT, HOST, function(err, bytes) {
       if (err) throw err;
       client.close();
   });
+}
+
+function encrypt(buffer){
+  var cipher = crypto.createCipher(algorithm,password)
+  var crypted = Buffer.concat([cipher.update(buffer),cipher.final()]);
+  return crypted;
 }
