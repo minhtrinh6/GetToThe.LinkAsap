@@ -3,9 +3,9 @@ const cors = require('cors')
 const app = express()
 var bodyParser = require('body-parser')
 var redis = require("redis"),
-    client = redis.createClient({password: 'CuteShibaBouncing'}),
-      pub = redis.createClient({password: 'CuteShibaBouncing'}),
-      sub = redis.createClient({password: 'CuteShibaBouncing'});
+    client = redis.createClient({password: process.env.GTT_PASSWORD}),
+      pub = redis.createClient({password: process.env.GTT_PASSWORD}),
+      sub = redis.createClient({password: process.env.GTT_PASSWORD});
 const io = require('socket.io')(3001, {path: '/ws'});
 io.origins('*:*')
 const redisAdapter = require('socket.io-redis');
