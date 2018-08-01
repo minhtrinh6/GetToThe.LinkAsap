@@ -7,8 +7,7 @@ provider:
   name: aws
   runtime: nodejs8.10
   memorySize: 128
-  environment:
-    GTT_PASSWORD: ${env:GTT_PASSWORD}
+  timeout: 5
 
 # stage and region
 stage: dev

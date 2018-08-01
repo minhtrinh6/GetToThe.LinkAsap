@@ -2,7 +2,7 @@ var dgram = require('dgram');
 // Part of https://github.com/chris-rock/node-crypto-examples
 var crypto = require('crypto'),
     algorithm = 'aes-128-cbc',
-    password = process.env.GTT_PASSWORD;
+    password = "PASSWORD";
     
 exports.handler = (event, context, callback) => {
     const request = event.Records[0].cf.request;

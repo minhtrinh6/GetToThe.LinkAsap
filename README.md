@@ -12,3 +12,6 @@
   * ~~Process log from CloudTrail~~
     * ~~Using AWS Lambda to process log~~
     * ~~Triggered every 1 minute~~
+
+# Note
+* Update AWS Lambda@Edge encryption password manually since Lambda@Edge doesn't allow environment variable.
