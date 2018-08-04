@@ -1,9 +1,9 @@
 const dgram = require('dgram'),
 	  server = dgram.createSocket('udp4');
 const redis = require("redis"),
-	  log = redis.createClient({password: process.env.GTT_PASSWORD}),
-      pub = redis.createClient({password: process.env.GTT_PASSWORD}),
-      sub = redis.createClient({password: process.env.GTT_PASSWORD});
+	  log = redis.createClient({host: process.env.GTT_REDIS_HOST, password: process.env.GTT_PASSWORD}),
+    pub = redis.createClient({host: process.env.GTT_REDIS_HOST, password: process.env.GTT_PASSWORD}),
+    sub = redis.createClient({host: process.env.GTT_REDIS_HOST, password: process.env.GTT_PASSWORD});
 const io = require('socket.io')();
 const redisAdapter = require('socket.io-redis');
 io.adapter(redisAdapter({ pubClient: pub, subClient: sub }));

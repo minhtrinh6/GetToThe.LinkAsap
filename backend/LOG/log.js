@@ -3,9 +3,9 @@ const cors = require('cors')
 const app = express()
 var bodyParser = require('body-parser')
 var redis = require("redis"),
-    client = redis.createClient({password: process.env.GTT_PASSWORD}),
-      pub = redis.createClient({password: process.env.GTT_PASSWORD}),
-      sub = redis.createClient({password: process.env.GTT_PASSWORD});
+	  log = redis.createClient({host: process.env.GTT_REDIS_HOST, password: process.env.GTT_PASSWORD}),
+    pub = redis.createClient({host: process.env.GTT_REDIS_HOST, password: process.env.GTT_PASSWORD}),
+    sub = redis.createClient({host: process.env.GTT_REDIS_HOST, password: process.env.GTT_PASSWORD});
 const io = require('socket.io')(3001, {path: '/ws'});
 io.origins('*:*')
 const redisAdapter = require('socket.io-redis');
@@ -24,8 +24,8 @@ app.enable('trust proxy');
 
 app.post('/', function (req, res, next) {
   var ip = req.ip
-  client.incr(String(req.body.link), function() {})
-  client.get(String(req.body.link), function(err, result) {
+  log.incr(String(req.body.link), function() {})
+  log.get(String(req.body.link), function(err, result) {
     io.in(String(req.body.link)).emit('update', {link: String(req.body.link), count: result});
   })
   res.sendStatus(200)
@@ -36,7 +36,7 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){});
   socket.on('subscribe', function(room) {
     socket.join(room)
-  client.get(room, function(err, result) {
+  log.get(room, function(err, result) {
     io.in(room).emit('update', {link: room, count: result});
   })
   })
