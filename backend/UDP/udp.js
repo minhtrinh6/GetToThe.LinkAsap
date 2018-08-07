@@ -19,6 +19,7 @@ server.on('error', (err) => {
 
 server.on('message', (msg, rinfo) => {
 	var req = JSON.parse(decrypt(msg).toString('utf-8'))
+	process_request(req);
 	var uri = String(req.uri.replace('/', '')).toLowerCase()
 	log.get(uri, function (err, reply) {
 		reply = ((reply != null) ? parseInt(reply,10)+1 : 1)
@@ -31,6 +32,10 @@ function decrypt(buffer){
   var decipher = crypto.createDecipher(algorithm,password)
   var dec = Buffer.concat([decipher.update(buffer) , decipher.final()]);
   return dec;
+}
+
+function process_request(req) {
+  return null;
 }
 
 server.on('listening', () => {
