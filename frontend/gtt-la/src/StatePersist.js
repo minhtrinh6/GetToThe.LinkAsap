@@ -36,9 +36,10 @@ class StatePersist extends React.Component {
       }
       parent.setState({[key]: value});
 
-      if (key in this.props.hydrateCallback) {
-        this.props.hydrateCallback[key](value);
-      }
+      if ('hydrateCallback' in this.props && this.props.hydrateCallback !== undefined)
+        if (key in this.props.hydrateCallback) {
+          this.props.hydrateCallback[key](value);
+        }
     });
   }
   
