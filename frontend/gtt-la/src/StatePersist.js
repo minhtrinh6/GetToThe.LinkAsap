@@ -1,5 +1,7 @@
 import React from 'react';
 import store from 'store';
+import moreTypes from './moretypes.js'
+store.addPlugin(moreTypes);
 
 class StatePersist extends React.Component {
   constructor(props) {
@@ -29,11 +31,6 @@ class StatePersist extends React.Component {
   hydrateState = () => {
     var parent = this.props.parent;
     store.each((value, key) => {
-      if (value.type === "Map") {
-        value = new Map(value.data);
-      } else {
-        value = value.data
-      }
       parent.setState({[key]: value});
 
       if ('hydrateCallback' in this.props && this.props.hydrateCallback !== undefined)
@@ -48,12 +45,7 @@ class StatePersist extends React.Component {
       if (key === 'ws') {
         return;
       }
-      var type = value.constructor.name
-      if (value instanceof Map) {
-        value = Array.from(value.entries());
-      }
-      var datum = {type: type, data: value};
-      store.set([key], datum);
+      store.set([key], value)
     });
   }
   

@@ -9,10 +9,11 @@ import update from 'immutability-helper';
 import {compose, withPropsOnChange, withState, withHandlers} from 'recompose';
 
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Container, Button, Row, Col, Card, CardBody,
+import { Container, Button, Row, Col, Card, CardBody, CardHeader, 
   CardTitle, InputGroup, InputGroupAddon, InputGroupText, Input, ListGroup, 
   ListGroupItem, Badge, ListGroupItemHeading, ListGroupItemText, ButtonGroup,
-  ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Collapse
+  ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Collapse,
+  Form, FormGroup, Label, CustomInput
 } 
 from 'reactstrap';
 
@@ -23,9 +24,10 @@ import io from 'socket.io-client';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faAngleDoubleRight);
+library.add(faWindowClose);
 
 
 class App extends Component {
@@ -159,7 +161,7 @@ class AppHead extends React.Component {
         </InputGroupAddon>
         <Input className="form-control bg-light py-2 border-left-0 border" placeholder="put long url here" style={{'boxShadow': 'none'}} onChange={this.handleChange} value={this.props.text}/>
         <InputGroupAddon addonType="append">
-          <Button className="btn-sm" color="primary" style={{'boxShadow': 'none'}} title="1.26996 * 10^25 😲">Shorten it!</Button>
+          <Button className="btn-sm" color="primary" style={{'boxShadow': 'none'}} title="1.26996 * 10^25 😲">Enhance it!</Button>
         </InputGroupAddon>
       </InputGroup>
     </form>
@@ -217,11 +219,13 @@ const AppBodyTitle =
       <CardTitle>
           <ButtonGroup className="shadow" style={{ marginBottom: '1rem' }}>
             <Button id="btn-home" color="primary" style={{'boxShadow': 'none'}} onClick={click} 
-              active={props.current === "home"}>Home</Button>
+              active={props.current === "home"}  >Home</Button>
+              
             <Button id="btn-links" color="primary" style={{'boxShadow': 'none'}} onClick={click}
               active={props.current === "links"}>Generated Links</Button>
+              
             <ButtonDropdown  isOpen={isToggle} toggle={toggle}>
-              <DropdownToggle color="primary" style={{'boxShadow': 'none'}} 
+              <DropdownToggle color="success" style={{'boxShadow': 'none'}}
                 active={props.current.includes("account") || isOpen} caret>
                 Account
               </DropdownToggle>
@@ -232,7 +236,7 @@ const AppBodyTitle =
             </ButtonDropdown>
           </ButtonGroup>
           <Collapse isOpen={isOpen}>
-            <AppBodyLogIn save={props.save}/>
+            <AppBodyLogIn close={open} signup={click}/>
           </Collapse>
       </CardTitle>
       )
@@ -248,18 +252,62 @@ const AppBodyRender = (props) => {
         return (<AppBodyWithoutList />)
     }
 }
+
 const AppBodyLogIn = (props) => {
   return (
     <Card>
       <CardBody>
-        TODO
+      <span className="row justify-content-center">
+      <Button onClick={props.close} className="mb-1">
+        <FontAwesomeIcon icon="window-close" />
+        &nbsp; Close
+      </Button>
+      <Form className="ml-2 mb-1">
+        <FormGroup className="ml-1 mr-1">
+          <Label for="exampleEmail" hidden>Email</Label>
+          <Input type="email" name="email" id="exampleEmail" placeholder="Email" />
+        </FormGroup>
+
+        <FormGroup className="ml-1 mr-1">
+          <Label for="examplePassword" hidden>Password</Label>
+          <Input type="password" name="password" id="examplePassword" placeholder="Password" />
+        </FormGroup>
+        
+        <CustomInput type="checkbox" id="exampleCustomCheckbox" className="mb-1" label="Remember me" />
+        <Button color="primary" className="ml-1 mr-1" disabled>Log in</Button>
+        <Button id="btn-account-signup" color="success" className="ml-1 mr-1" onClick={(e) => {props.close(e); props.signup(e);}}>Sign up</Button>
+      </Form>
+      </span>
+      
       </CardBody>
     </Card>
   )
 }
 
 const AppBodySignUp = (props) => {
-  return (null)
+  return (
+    
+    <Card className="mx-auto">
+      <CardHeader><b>Sign up for a new account</b></CardHeader> 
+      <CardBody>
+      <Form>
+        <FormGroup row>
+          <Label for="exampleEmail" sm={2}>Email</Label>
+          <Col sm={10}>
+            <Input type="email" name="email" id="exampleEmail" placeholder="with a placeholder" />
+          </Col>
+        </FormGroup>
+        <FormGroup row>
+          <Label for="examplePassword" sm={2}>Password</Label>
+          <Col sm={10}>
+            <Input type="password" name="password" id="examplePassword" placeholder="password placeholder" />
+          </Col>
+        </FormGroup>
+      </Form>
+      </CardBody>
+    </Card>  
+     
+  )
 }
 
 const AppBodyWithList = (props) => {
@@ -285,7 +333,13 @@ const AppBodyWithList = (props) => {
 
 const AppBodyWithoutList = () => {
   return (
+    <div>
     <CardTitle>Welcome to GetToThe.LinkAsap</CardTitle>
+    <CardBody>
+      Enhance given URL. The enhanced links are in the format of adjective + animal + verb.<br/>
+Utilizing AWS S3, CloudFront, and Lambda to ensures fast and realiable service.
+    </CardBody>
+    </div>
   )
 }
 
