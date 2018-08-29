@@ -26,6 +26,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleRight, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
+import {Pie} from 'react-chartjs-2';
+
 library.add(faAngleDoubleRight);
 library.add(faWindowClose);
 
@@ -174,12 +176,53 @@ class AppBody extends Component {
     super(props);
     this.state = {
       current: "home",
+      stat_id: undefined,
+      stat: {},
       initUpdate: true
     }
   }
   
   change_current = (page) => {
     this.setState({current: page});
+  }
+  
+  view_stat = (e) => {
+    this.change_current("stat")
+    var link_id = e.target.id
+    this.setState({stat_id: link_id})
+    this.props.ws.emit('subscribe-stat', link_id)
+    // console.log(link_id)
+  }
+  
+  // https://stackoverflow.com/a/16348977/2900949
+  stringToColour = (str) => {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var colour = '#';
+    for (i = 0; i < 3; i++) {
+      var value = (hash >> (i * 8)) & 0xFF;
+      colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+  }
+  
+  componentDidMount() {
+    this.props.ws.on('update-stat', (data) => {
+      console.log(data);
+      var temp = {
+        datasets: [{
+            data: Object.values(data),
+            backgroundColor: Object.keys(data).map(x => this.stringToColour(x))
+        }],
+    
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: Object.keys(data)
+        };
+        console.log(temp)
+      this.setState({stat: temp})
+    })
   }
   
   componentDidUpdate() {
@@ -193,7 +236,9 @@ class AppBody extends Component {
       <Card className="text-center shadow-lg bg-light rounded">
         <CardBody>
           <AppBodyTitle current={this.state.current} change_current={this.change_current}/>
-          <AppBodyRender current={this.state.current} save={this.props.save}/>
+          <AppBodyRender current={this.state.current} 
+            change_current={this.change_current} save={this.props.save}
+            view_stat={this.view_stat} stat={this.state.stat}/>
         </CardBody>
       </Card>
     )
@@ -236,24 +281,13 @@ const AppBodyTitle =
             </ButtonDropdown>
           </ButtonGroup>
           <Collapse isOpen={isOpen}>
-            <AppBodyLogIn close={open} signup={click}/>
+            <AppTitleLogIn close={open} signup={click}/>
           </Collapse>
       </CardTitle>
       )
   )
 
-const AppBodyRender = (props) => {
-    switch (props.current) {
-      case "links":
-        return (<AppBodyWithList save={props.save}/>)
-      case "account-signup":
-        return (<AppBodySignUp save={props.save}/>)
-      default:
-        return (<AppBodyWithoutList />)
-    }
-}
-
-const AppBodyLogIn = (props) => {
+const AppTitleLogIn = (props) => {
   return (
     <Card>
       <CardBody>
@@ -284,9 +318,21 @@ const AppBodyLogIn = (props) => {
   )
 }
 
+const AppBodyRender = (props) => {
+    switch (props.current) {
+      case "links":
+        return (<AppBodyWithList save={props.save} view_stat={props.view_stat}/>)
+      case "account-signup":
+        return (<AppBodySignUp save={props.save}/>)
+      case "stat":
+        return (<AppBodyStat stat={props.stat}/>)
+      default:
+        return (<AppBodyWithoutList />)
+    }
+}
+
 const AppBodySignUp = (props) => {
   return (
-    
     <Card className="mx-auto">
       <CardHeader><b>Sign up for a new account</b></CardHeader> 
       <CardBody>
@@ -310,7 +356,17 @@ const AppBodySignUp = (props) => {
   )
 }
 
-const AppBodyWithList = (props) => {
+const AppBodyWithList = 
+// compose(
+//   withPropsOnChange(
+//     ['current'],
+//     (props) => ({
+//       props: props,
+//   })),
+//   withHandlers({
+//     viewstat: ({ props }) => (e) => {e.preventDefault(); props.view_stat(e.target.id); return true;}
+//   })) (({props, viewstat}) => 
+  (props) => {
   return (
     <ListGroup>
       <ReactCSSTransitionGroup transitionName="Appbody-list" transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
@@ -319,6 +375,7 @@ const AppBodyWithList = (props) => {
           <ListGroupItemHeading>
             <a className="float-left" href={"https://gtt.la/" + item.gLink} target="_blank">https://gtt.la/{item.gLink}</a>
             <Badge className="float-right" color="info">{item.view} clicks</Badge>
+            <Badge className="float-right" id={item.id} onClick={props.view_stat} style={{"marginRight":"5px"}} color="info" href="#">statistics</Badge>
           </ListGroupItemHeading>
           <br/><ListGroupItemText className="float-left">
             <FontAwesomeIcon icon="angle-double-right" />
@@ -342,6 +399,23 @@ Utilizing AWS S3, CloudFront, and Lambda to ensures fast and realiable service.
     </div>
   )
 }
+// {props.data !== undefined && (<Pie data={props.data} />)}
+const AppBodyStat = (props) => {
+    // return (
+    //   <Card className="mx-auto">
+    //     <CardTitle>Viewing stat</CardTitle>
+    //     {props.data !== undefined && console.log(props.data)}
+        
+    //   </Card>
+    // )
+    console.log(props.stat)
+    if (props.stat !== undefined) {
+      console.log('dataaaaaa')
+      return (<Pie data={props.stat} />)
+    } else {
+      return (<Card className="mx-auto"></Card>)
+    }
+  }
 
 class AppFoot extends Component {
   render() {

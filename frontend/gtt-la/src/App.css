@@ -87,15 +87,19 @@ body { background: #EBEDEF !important; }
 
 #spaceship {
   opacity: 0;
-  animation: flyup 3s ease-out infinite;
+  /*animation: flyup 3s ease-out infinite;*/
 }
 
-#l {
-  animation: hidel 3s steps(100) infinite;
-}
+/*#l {*/
+/*  animation: hidel 3s steps(100) infinite;*/
+/*}*/
 
 .navbar {
     margin: auto;
     width: 50%;
     border: 3px solid green;
+}
+
+html {
+    overflow-y: scroll;
 }

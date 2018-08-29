@@ -47,6 +47,11 @@ function process_request(msg) {
   if (ua != undefined) {
     console.log(ua.family)
     log.hincrby(uri+":browsers", ua.family, 1)
+    log.hgetall(uri+":browsers", function(err, result) {
+      io.to(uri+"-stat").emit("update-stat", result)
+      console.log('emit', uri)
+    })
+    
   }
   // console.log(ua), ref)
   return true;

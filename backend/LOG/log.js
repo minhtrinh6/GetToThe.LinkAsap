@@ -36,9 +36,20 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){});
   socket.on('subscribe', function(room) {
     socket.join(room)
-  log.hget(room, "count", function(err, result) {
-    io.in(room).emit('update', {link: room, count: result});
+    log.hget(room, "count", function(err, result) {
+      io.in(room).emit('update', {link: room, count: result});
+    })
   })
+  socket.on('subscribe-stat', function(room) {
+    socket.join(room+'-stat')
+    log.hgetall(room+':browsers', function(err, result) {
+      console.log(room+':browsers')
+      console.log(result)
+      io.in(room+'-stat').emit('update-stat', result)
+    })
+  })
+  socket.on('leave-stat', function(room) {
+      socket.leave(room+'-stat')
   })
 });
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
