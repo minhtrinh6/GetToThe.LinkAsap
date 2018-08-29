@@ -36,7 +36,7 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){});
   socket.on('subscribe', function(room) {
     socket.join(room)
-  log.get(room, function(err, result) {
+  log.hget(room, "count", function(err, result) {
     io.in(room).emit('update', {link: room, count: result});
   })
   })

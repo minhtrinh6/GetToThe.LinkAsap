@@ -1,4 +1,4 @@
-pac{
+{
   "name": "log",
   "version": "1.0.0",
   "description": "",
@@ -9,7 +9,11 @@ pac{
   "author": "Tri Hoang",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
     "ioredis": "^3.2.2",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "socket.io": "^2.1.1",
+    "socket.io-redis": "^5.2.0"
   }
 }
